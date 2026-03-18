@@ -14,7 +14,7 @@ export function BoardView({ features, onCardClick, onUpvote, onStatusChange, onA
     e.preventDefault();
     const id = e.dataTransfer.getData("text/plain");
     if (id) {
-      onStatusChange(Number(id), status);
+      onStatusChange(id, status);
     }
   };
 

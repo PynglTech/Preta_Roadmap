@@ -61,7 +61,14 @@ export function useRoadmap() {
     try {
       const { data, error } = await supabase
         .from('features')
-        .insert([{ ...newFeature }])
+        .insert([{ 
+          title: newFeature.title,
+          desc: newFeature.desc,
+          status: newFeature.status,
+          type: newFeature.type,
+          priority: newFeature.priority,
+          votes: newFeature.votes || 0
+        }])
         .select();
 
       if (error) throw error;
