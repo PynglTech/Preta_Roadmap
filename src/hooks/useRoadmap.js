@@ -8,7 +8,7 @@ export function useRoadmap() {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("All");
   const [filterPriority, setFilterPriority] = useState("All");
-  const [sortBy, setSortBy] = useState("votes");
+  const [sortBy, setSortBy] = useState("title");
 
   const fetchFeatures = useCallback(async () => {
     try {
@@ -16,10 +16,10 @@ export function useRoadmap() {
       const { data, error } = await supabase
         .from('features')
         .select('*')
-        .order('votes', { ascending: false });
+        .order('title', { ascending: true });
 
       if (error) throw error;
-      
+
       if (data && data.length > 0) {
         setFeatures(data);
       } else {
@@ -46,7 +46,7 @@ export function useRoadmap() {
           status: updatedFeature.status,
           type: updatedFeature.type,
           priority: updatedFeature.priority,
-          votes: updatedFeature.votes
+          requestedBy: updatedFeature.requestedBy
         })
         .eq('id', updatedFeature.id);
 
@@ -61,13 +61,13 @@ export function useRoadmap() {
     try {
       const { data, error } = await supabase
         .from('features')
-        .insert([{ 
+        .insert([{
           title: newFeature.title,
           desc: newFeature.desc,
           status: newFeature.status,
           type: newFeature.type,
           priority: newFeature.priority,
-          votes: newFeature.votes || 0
+          requestedBy: newFeature.requestedBy
         }])
         .select();
 
@@ -110,23 +110,6 @@ export function useRoadmap() {
     }
   }, []);
 
-  const upvoteFeature = useCallback(async (id) => {
-    try {
-      const feature = features.find(f => f.id === id);
-      if (!feature) return;
-
-      const newVotes = (feature.votes || 0) + 1;
-      const { error } = await supabase
-        .from('features')
-        .update({ votes: newVotes })
-        .eq('id', id);
-
-      if (error) throw error;
-      setFeatures(prev => prev.map(f => f.id === id ? { ...f, votes: newVotes } : f));
-    } catch (e) {
-      console.error("Error upvoting feature:", e);
-    }
-  }, [features]);
 
   const setFeatureStatus = useCallback(async (id, status) => {
     try {
@@ -144,14 +127,13 @@ export function useRoadmap() {
 
   const filteredFeatures = (features || [])
     .filter(f => {
-      const matchSearch = (f.title || "").toLowerCase().includes(search.toLowerCase()) || 
-                          (f.desc || "").toLowerCase().includes(search.toLowerCase());
+      const matchSearch = (f.title || "").toLowerCase().includes(search.toLowerCase()) ||
+        (f.desc || "").toLowerCase().includes(search.toLowerCase());
       const matchType = filterType === "All" || f.type === filterType;
       const matchPriority = filterPriority === "All" || f.priority === filterPriority;
       return matchSearch && matchType && matchPriority;
     })
     .sort((a, b) => {
-      if (sortBy === "votes") return (b.votes || 0) - (a.votes || 0);
       return (a.title || "").localeCompare(b.title || "");
     });
 
@@ -171,7 +153,6 @@ export function useRoadmap() {
     addFeature,
     deleteFeature,
     deleteAllFeatures,
-    upvoteFeature,
     setFeatureStatus,
   };
 }

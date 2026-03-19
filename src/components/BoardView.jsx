@@ -3,7 +3,7 @@ import { COLUMNS } from "../lib/constants";
 import { FeatureCard } from "./FeatureCard";
 import { Plus } from "lucide-react";
 
-export function BoardView({ features, onCardClick, onUpvote, onStatusChange, onAddClick }) {
+export function BoardView({ features, onCardClick, onStatusChange, onAddClick }) {
   const [draggedId, setDraggedId] = useState(null);
 
   const handleDragOver = (e) => {
@@ -61,7 +61,6 @@ export function BoardView({ features, onCardClick, onUpvote, onStatusChange, onA
                   <FeatureCard 
                     feature={f} 
                     onClick={() => onCardClick(f)} 
-                    onUpvote={onUpvote} 
                   />
                 </div>
               ))}

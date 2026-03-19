@@ -11,8 +11,7 @@ export function AddModal({ isOpen, onClose, onAdd, defaultStatus = "review" }) {
     status: defaultStatus,
     priority: "Medium",
     tags: [],
-    votes: 0,
-    comments: 0
+    requestedBy: ""
   });
   
   const [tagInput, setTagInput] = useState("");
@@ -98,6 +97,17 @@ export function AddModal({ isOpen, onClose, onAdd, defaultStatus = "review" }) {
               <select name="type" value={form.type} onChange={handleChange}>
                 {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
+            </div>
+
+            <div className="form-group">
+              <label>Client</label>
+              <input 
+                type="text" 
+                name="requestedBy" 
+                value={form.requestedBy} 
+                onChange={handleChange} 
+                placeholder="e.g. Google, Meta, etc."
+              />
             </div>
           </div>
 

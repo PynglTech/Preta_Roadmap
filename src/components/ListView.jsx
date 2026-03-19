@@ -1,9 +1,9 @@
 import React from "react";
 import { COLUMNS } from "../lib/constants";
-import { TypeBadge, PriorityBadge } from "./Core";
-import { ArrowUp, Trash2 } from "lucide-react";
+import { TypeBadge, PriorityBadge, ClientBadge } from "./Core";
+import { Trash2 } from "lucide-react";
 
-export function ListView({ features, onSelect, onUpvote, onDelete }) {
+export function ListView({ features, onSelect, onDelete }) {
   const statusMap = Object.fromEntries(COLUMNS.map(c => [c.key, c]));
 
   return (
@@ -15,7 +15,7 @@ export function ListView({ features, onSelect, onUpvote, onDelete }) {
             <th>Type</th>
             <th>Status</th>
             <th>Priority</th>
-            <th className="text-right">Votes</th>
+            <th>Client</th>
             <th className="text-right">Actions</th>
           </tr>
         </thead>
@@ -42,15 +42,9 @@ export function ListView({ features, onSelect, onUpvote, onDelete }) {
                   </span>
                 </td>
                 <td><PriorityBadge priority={f.priority} /></td>
-                <td className="text-right votes-cell">
-                   <ArrowUp size={14} />
-                   {f.votes}
-                </td>
+                <td><ClientBadge name={f.requestedBy} /></td>
                 <td className="text-right">
                   <div className="actions">
-                    <button className="action-btn vote" onClick={(e) => { e.stopPropagation(); onUpvote(f.id); }}>
-                      Vote
-                    </button>
                     <button className="action-btn delete" onClick={(e) => { e.stopPropagation(); onDelete(f.id); }}>
                       <Trash2 size={14} />
                     </button>

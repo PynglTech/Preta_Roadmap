@@ -42,33 +42,33 @@ export function DetailPanel({ feature, onClose, onSave, onDelete }) {
           <span className="panel-title">Feature Details</span>
         </div>
         <div className="header-actions">
-           <button className="icon-btn delete" onClick={() => onDelete(feature.id)}>
-             <Trash2 size={18} />
-           </button>
-           <button className="icon-btn close" onClick={onClose}>
-             <X size={20} />
-           </button>
+          <button className="icon-btn delete" onClick={() => onDelete(feature.id)}>
+            <Trash2 size={18} />
+          </button>
+          <button className="icon-btn close" onClick={onClose}>
+            <X size={20} />
+          </button>
         </div>
       </div>
 
       <div className="panel-body">
         <div className="form-group">
           <label>Title</label>
-          <input 
-            type="text" 
-            name="title" 
-            value={form.title} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="title"
+            value={form.title}
+            onChange={handleChange}
             placeholder="Feature name..."
           />
         </div>
 
         <div className="form-group">
           <label>Description</label>
-          <textarea 
-            name="desc" 
-            value={form.desc || ""} 
-            onChange={handleChange} 
+          <textarea
+            name="desc"
+            value={form.desc || ""}
+            onChange={handleChange}
             placeholder="Add a detailed description..."
             rows={5}
           />
@@ -97,6 +97,17 @@ export function DetailPanel({ feature, onClose, onSave, onDelete }) {
         </div>
 
         <div className="form-group">
+          <label>Requested By</label>
+          <input 
+            type="text" 
+            name="requestedBy" 
+            value={form.requestedBy || ""} 
+            onChange={handleChange} 
+            placeholder="e.g. Google, Meta, etc."
+          />
+        </div>
+
+        <div className="form-group">
           <label>Tags</label>
           <div className="tags-container">
             {form.tags?.map(tag => (
@@ -107,9 +118,9 @@ export function DetailPanel({ feature, onClose, onSave, onDelete }) {
             ))}
           </div>
           <div className="tag-input-wrapper">
-            <input 
-              type="text" 
-              value={tagInput} 
+            <input
+              type="text"
+              value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
               placeholder="Add tag..."

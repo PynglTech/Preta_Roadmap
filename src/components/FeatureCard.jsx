@@ -1,9 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { MessageSquare, ArrowUp } from "lucide-react";
-import { TypeBadge, PriorityBadge } from "./Core";
+import { MessageSquare } from "lucide-react";
+import { TypeBadge, PriorityBadge, ClientBadge } from "./Core";
 
-export function FeatureCard({ feature, onClick, onUpvote }) {
+export function FeatureCard({ feature, onClick }) {
   return (
     <motion.div
       layout
@@ -19,8 +19,8 @@ export function FeatureCard({ feature, onClick, onUpvote }) {
       <div className="card-meta">
         <TypeBadge type={feature.type} />
         <PriorityBadge priority={feature.priority} />
+        <ClientBadge name={feature.requestedBy} />
       </div>
-
       {feature.tags?.length > 0 && (
         <div className="card-tags">
           {feature.tags.map(tag => (
@@ -30,26 +30,12 @@ export function FeatureCard({ feature, onClick, onUpvote }) {
       )}
 
       <div className="card-footer">
-        <div className="stats">
-          <div className="stat">
-            <ArrowUp size={14} className="icon-up" />
-            <span className="count">{feature.votes}</span>
-          </div>
           <div className="stat">
             <MessageSquare size={13} className="icon-comment" />
             <span className="count">{feature.comments}</span>
           </div>
-        </div>
         
-        <button 
-          className="vote-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            onUpvote(feature.id);
-          }}
-        >
-          Vote
-        </button>
+
       </div>
     </motion.div>
   );

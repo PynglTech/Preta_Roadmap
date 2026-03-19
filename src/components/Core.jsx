@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Hexagon, ArrowBigUpDash, Target, Square } from "lucide-react";
+import { Sparkles, Hexagon, ArrowBigUpDash, Target, Square, User } from "lucide-react";
 import { PRIORITY_COLORS } from "../lib/constants";
 
 const ICON_MAP = {
@@ -29,7 +29,7 @@ export function PriorityBadge({ priority }) {
   );
 }
 
-export function Avatar({ name, size = 28 }) {
+export function Avatar({ name, size = 28, className = "" }) {
   const initials = name
     .split(" ")
     .map((w) => w[0])
@@ -40,7 +40,7 @@ export function Avatar({ name, size = 28 }) {
   const hue = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360;
   
   return (
-    <div className="avatar" style={{ 
+    <div className={`avatar ${className}`} style={{ 
       width: `${size}px`, 
       height: `${size}px`, 
       background: `hsl(${hue}, 50%, 45%)`,
@@ -48,5 +48,15 @@ export function Avatar({ name, size = 28 }) {
     }}>
       {initials}
     </div>
+  );
+}
+
+export function ClientBadge({ name }) {
+  if (!name) return null;
+  return (
+    <span className="badge-client">
+      <Avatar name={name} size={16} className="client-avatar" />
+      <span className="client-name">{name}</span>
+    </span>
   );
 }

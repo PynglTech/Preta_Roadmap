@@ -4,13 +4,13 @@ import { BoardView } from "./components/BoardView";
 import { ListView } from "./components/ListView";
 import { DetailPanel } from "./components/DetailPanel";
 import { AddModal } from "./components/AddModal";
-import { 
-  LayoutGrid, 
-  List, 
-  Search, 
-  Plus, 
-  Filter, 
-  TrendingUp, 
+import {
+  LayoutGrid,
+  List,
+  Search,
+  Plus,
+  Filter,
+  TrendingUp,
   BarChart3,
   Github,
   Trash2
@@ -37,7 +37,6 @@ export default function App() {
     addFeature,
     deleteFeature,
     deleteAllFeatures,
-    upvoteFeature,
     setFeatureStatus,
     loading,
   } = useRoadmap();
@@ -47,7 +46,6 @@ export default function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [defaultStatus, setDefaultStatus] = useState("review");
 
-  const totalVotes = features.reduce((acc, f) => acc + f.votes, 0);
 
   return (
     <div className="app-layout">
@@ -68,14 +66,14 @@ export default function App() {
 
         <nav className="sidebar-nav">
           <div className="nav-section">Views</div>
-          <button 
+          <button
             className={`nav-item ${activeView === "board" ? "active" : ""}`}
             onClick={() => setActiveView("board")}
           >
             <LayoutGrid size={18} />
             Board
           </button>
-          <button 
+          <button
             className={`nav-item ${activeView === "list" ? "active" : ""}`}
             onClick={() => setActiveView("list")}
           >
@@ -96,11 +94,11 @@ export default function App() {
         <div className="sidebar-footer">
           <div className="stats-card">
             <div className="stat-item">
-              <span className="label">Total Votes</span>
-              <span className="value">{totalVotes}</span>
+              <span className="label">Roadmap Progress</span>
+              <span className="value">70%</span>
             </div>
             <div className="progress-bar">
-               <div className="progress-fill" style={{ width: "70%" }} />
+              <div className="progress-fill" style={{ width: "70%" }} />
             </div>
           </div>
           <div className="github-link">
@@ -119,9 +117,9 @@ export default function App() {
         <header className="top-bar">
           <div className="search-container">
             <Search size={18} className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search features..." 
+            <input
+              type="text"
+              placeholder="Search features..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -138,7 +136,6 @@ export default function App() {
             <div className="filter-group">
               <TrendingUp size={16} />
               <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="votes">Popularity</option>
                 <option value="title">Alphabetical</option>
               </select>
             </div>
@@ -152,10 +149,9 @@ export default function App() {
               <p>Syncing with Supabase...</p>
             </div>
           ) : activeView === "board" ? (
-            <BoardView 
+            <BoardView
               features={filteredFeatures}
               onCardClick={setSelectedFeature}
-              onUpvote={upvoteFeature}
               onStatusChange={setFeatureStatus}
               onAddClick={(status) => {
                 setDefaultStatus(status);
@@ -163,10 +159,9 @@ export default function App() {
               }}
             />
           ) : (
-            <ListView 
+            <ListView
               features={filteredFeatures}
               onSelect={setSelectedFeature}
-              onUpvote={upvoteFeature}
               onDelete={deleteFeature}
             />
           )}
@@ -176,13 +171,16 @@ export default function App() {
       {/* Overlays */}
       <AnimatePresence>
         {selectedFeature && (
-          <DetailPanel 
+          <DetailPanel
             feature={selectedFeature}
             onClose={() => setSelectedFeature(null)}
-            onSave={updateFeature}
+            onSave={(data) => {
+              updateFeature(data);
+              setSelectedFeature(null);
+            }}
             onDelete={(id) => {
-               deleteFeature(id);
-               setSelectedFeature(null);
+              deleteFeature(id);
+              setSelectedFeature(null);
             }}
           />
         )}
@@ -190,7 +188,7 @@ export default function App() {
 
       <AnimatePresence>
         {isAddModalOpen && (
-          <AddModal 
+          <AddModal
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
             onAdd={addFeature}
